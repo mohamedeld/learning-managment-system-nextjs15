@@ -5,6 +5,7 @@ export default defineConfig({
     schema:"./drizzle/schema.ts",
     strict:true,
     verbose:true,
+    dialect:"postgresql",
     dbCredentials:{
         host:"localhost",
         port:5432,
