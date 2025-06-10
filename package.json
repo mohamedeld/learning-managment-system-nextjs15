@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.12.0",
@@ -17,7 +20,6 @@
     "lucide-react": "^0.475.0",
     "mongoose": "^8.10.1",
     "next": "15.1.7",
-    "next-auth": "^5.0.0-beta.25",
     "pg": "^8.14.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
