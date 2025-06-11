@@ -1,5 +1,6 @@
 import {defineConfig} from "drizzle-kit"
-
+import { env } from "./data/env/server"
+console.log("dotenv",env);
 export default defineConfig({
     out:"./drizzle/migrations",
     schema:"./drizzle/schema.ts",
@@ -11,8 +12,7 @@ export default defineConfig({
         port:5432,
         database:"lms",
         user:"postgres",
-        password:process.env.DB_PASSWORD,
+        password:env.DB_PASSWORD,
         ssl:false
     },
-
 })
