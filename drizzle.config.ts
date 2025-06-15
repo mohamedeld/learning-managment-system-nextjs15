@@ -1,6 +1,6 @@
 import {defineConfig} from "drizzle-kit"
 import { env } from "./data/env/server"
-console.log("dotenv",env);
+
 export default defineConfig({
     out:"./drizzle/migrations",
     schema:"./drizzle/schema.ts",

@@ -11,6 +11,14 @@ export async function insertUser(data:typeof UserTable.$inferInsert){
     if(newUser === null){
         throw new Error("Failed to create user");
     }
+     if (!newUser) {
+    const [existing] = await db
+      .select()
+      .from(UserTable)
+      .where(eq(UserTable.clerkUserId, data.clerkUserId));
+    if (!existing) throw new Error("Failed to create user");
+    return existing;
+  }
     return newUser;
 }
 export async function updateUser({clerkUserId}:{clerkUserId:string},data:Partial<typeof UserTable.$inferInsert>){

@@ -1,4 +1,5 @@
 
+import { env } from "@/data/env/server"
 import { deleteUser, insertUser, updateUser } from "@/features/users/db/cache"
 import { syncClerkUserMetadata } from "@/services/clerk"
 import { WebhookEvent } from "@clerk/nextjs/server"
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
   const svixSignature = headerPayload.get("svix-signature")
 
   if (!svixId || !svixTimestamp || !svixSignature) {
-    return new Response("Error occurred -- no svix headers", {
+    return new Response('Error occurred -- no svix headers', {
       status: 400,
     })
   }
@@ -20,7 +21,8 @@ export async function POST(req: Request) {
   const payload = await req.json()
   const body = JSON.stringify(payload)
 
-  const wh = new Webhook(process.env.CLERK_WEBHOOKS_SECRET_KEY as string)
+  const wh = new Webhook(env.CLERK_WEBHOOKS_SECRET_KEY);
+
   let event: WebhookEvent
 
   try {
@@ -35,7 +37,7 @@ export async function POST(req: Request) {
       status: 400,
     })
   }
-
+  console.log("event ",event)
   switch (event.type) {
     case "user.created":
     case "user.updated": {
@@ -45,16 +47,18 @@ export async function POST(req: Request) {
       const name = `${event.data.first_name} ${event.data.last_name}`.trim()
       if (email == null) return new Response("No email", { status: 400 })
       if (name === "") return new Response("No name", { status: 400 })
-
+console.log("📥 Creating user in DB with Clerk ID:", event.data.id);
       if (event.type === "user.created") {
+          console.log("📥 Creating user in DB with Clerk ID:", event.data.id);
+
         const user = await insertUser({
           clerkUserId: event.data.id,
           email,
           name,
           imageUrl: event.data.image_url,
-          role: "user",
+          role: event.data.public_metadata?.role ?? "user"
+,
         })
-
         if (user) {
           await syncClerkUserMetadata(user)
         }
@@ -69,7 +73,7 @@ export async function POST(req: Request) {
           }
         )
       }
-      break
+      break;
     }
     case "user.deleted": {
       if (event.data.id != null) {
@@ -79,5 +83,5 @@ export async function POST(req: Request) {
     }
   }
 
-  return new Response("", { status: 200 })
+  return new Response("User added", { status: 200 })
 }

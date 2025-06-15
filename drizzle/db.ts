@@ -1,5 +1,6 @@
+import { env } from "@/data/env/server";
 import * as schema from "./schema";
-import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle } from "drizzle-orm/node-postgres"
 export const db = drizzle({
   schema,
   connection: {
@@ -7,6 +8,6 @@ export const db = drizzle({
     port: 5432,
     database: "lms",
     user: "postgres",
-    password: process.env.DB_PASSWORD,
+    password: env.DB_PASSWORD,
   },
 });
