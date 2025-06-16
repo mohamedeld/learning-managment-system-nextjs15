@@ -1,14 +1,20 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { getCurrentUser } from "@/services/clerk";
-import { canAccessAdminPages } from "@/permissions/general";
 
-function Navbar(){
-    return (
-        <header className="flex h-12 shadow bg-background z-10">
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { canAccessAdminPages } from "@/permissions/general";
+import { getCurrentUser } from "@/services/clerk";
+import Link from "next/link";
+import { ReactNode } from "react"
+import { Button } from "@/components/ui/button";
+
+const AdminLayout = ({children}:Readonly<{children:ReactNode}>) => {
+  return (
+    <>
+    <header className="flex h-12 shadow bg-background z-10">
             <nav className="flex gap-4 container">
-                <Link href={"/"} className="mr-auto flex items-center text-lg hover:underline px-2">Learning15</Link>
+                <div className="mr-auto flex items-center gap-2">
+
+                <Link href={"/"} className="text-lg hover:underline px-2">Learning15</Link>
+                </div>
                 <SignedIn>
                     <AdminLink/>
                     <Link className="hover:bg-accent/10 flex items-center px-2" href={"/courses"}>My Courses</Link>
@@ -31,10 +37,13 @@ function Navbar(){
                 </SignedOut>
             </nav>
         </header>
-    )
+    {children}</>
+  )
 }
 
-export default Navbar;
+export default AdminLayout;
+
+
 
 export async function AdminLink(){
     const user = await getCurrentUser();

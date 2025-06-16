@@ -1,6 +1,6 @@
 
 import { env } from "@/data/env/server"
-import { deleteUser, insertUser, updateUser } from "@/features/users/db/cache"
+import { deleteUser, insertUser, updateUser } from "@/features/users/db/users"
 import { syncClerkUserMetadata } from "@/services/clerk"
 import { WebhookEvent } from "@clerk/nextjs/server"
 import { headers } from "next/headers"
